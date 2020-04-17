@@ -8,10 +8,10 @@
     <!--div class="fadeIn first">
       <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
     </div-->
-
+  
     <form>
     <div class="form-group">  
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Korisničko ime">
+      <input type="text" id="email" class="fadeIn second" name="login" placeholder="E-mail">
     </div>
     <div class="form-group">
       <input type="text" id="password" class="fadeIn third" name="login" placeholder="Lozinka">
@@ -29,8 +29,8 @@
 </template>
 
 <script>
+
     export default {
-        
     }
 </script>
 

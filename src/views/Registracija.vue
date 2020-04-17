@@ -4,13 +4,6 @@
   <div id="formContent">
     <!-- Tabs Titles -->
     <h1 style="color:#56baed;">Registracija</h1>
-
-    <!-- Icon -->
-    <!--div class="fadeIn first">
-      <img src="" id="icon" alt="User Icon" />
-    </div-->
-
-
     <!-- Login Form -->
     <form>
         <div class="form-row">
