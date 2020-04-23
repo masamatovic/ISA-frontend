@@ -11,6 +11,10 @@
                 <router-link :to="{name: 'ZKarton'}" class="nav-item nav-link" v-if="korisnik=='pacijent'">
                     Zdravstveni karton
                 </router-link>
+                <router-link :to="{name: 'Klinike'}" class="nav-item nav-link" v-if="korisnik=='pacijent'">
+                    Pregled klinika
+                </router-link>
+                
                 
 
                

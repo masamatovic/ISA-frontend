@@ -5,6 +5,7 @@ import Login from "../views/Login.vue";
 import Registracija from "../views/Registracija.vue";
 import Pacijent from '@/views/pacijent/Pacijent.vue';
 import ZKarton from "@/views/pacijent/ZdravstveniKarton.vue";
+import Klinike from '@/views/pacijent/Klinike.vue';
 
 
 Vue.use(VueRouter);
@@ -34,7 +35,13 @@ const routes = [
     path: "/zdravstveniKarton",
     name: "ZKarton",
     component: ZKarton
+  },
+  {
+    path: "/pregledKlinika",
+    name: "Klinike",
+    component: Klinike
   }
+
 ];
 
 const router = new VueRouter({

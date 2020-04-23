@@ -65,18 +65,21 @@
                     <b-form-input v-model="info.dioptrija" disabled id="Dioptrija" type="text" ></b-form-input>
                 </b-col>
             </b-row>
+            <b-row class="kolona">
+                <b-col sm="3">
+                    <label for="Alergije">Dioptrija:</label>
+                </b-col>
+                <b-col sm="9">
+                    <b-form-input v-model="info.alergije" disabled id="Alergijr" type="text" ></b-form-input>
+                </b-col>
+            </b-row>
             <b-button-group style="border:black">
-                <b-button v-b-modal.alergije class="pregledi">Pregled alergija</b-button>
-                <b-button class="pregledi">Istorija bolesti</b-button>
+                <b-button v-b-modal.istorija class="pregledi">Istorija bolesti</b-button>
                 <b-button class="pregledi">Posete lekaru</b-button>
             </b-button-group>
             
-            <b-modal id="alergije" scrollable title="Pregled vasih alergija" ok-only>
-                <ul id="example-1">
-                    <li v-for="(x, index) in info.alergije" :key="index">
-                        {{x}}
-                    </li>
-                </ul>
+            <b-modal id="istorija" scrollable title="Pregled vasih alergija" ok-only>
+             nesto pise
             </b-modal>
                     
         </div>
@@ -95,7 +98,7 @@
                     visina: 187.5,
                     tezina: 87,
                     dioptrija: '-0.25',
-                    alergije: ['ambrozija', 'maline', 'brufen']
+                    alergije: 'ambrozija, maline, brufen'
                 }
             }
         
