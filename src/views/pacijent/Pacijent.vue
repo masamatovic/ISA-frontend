@@ -1,6 +1,10 @@
 <template>
     <div>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
+      <div v-if="poruka != ''">
+          <errorAlert  v-bind:poruka="poruka"></errorAlert>  
+        </div> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">   
+        
         <div class="wrapper fadeInDown">
         <div id="formContent">
     <!-- Tabs Titles -->
@@ -24,7 +28,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="exampleInputPassword1">JMBG:</label>
-                <input  disabled v-model="pacijent.JBMG"  type="text" id="jmbg" class="fadeIn second" name="login" >
+                <input  disabled v-model="pacijent.jmbg"  type="text" id="jmbg" class="fadeIn second" name="login" >
             </div>
             <div class="form-group col-md-6">
                 <label for="exampleInputPassword1">E-mail:</label>
@@ -48,7 +52,7 @@
             </div>
             <div class="form-group col-md-6">
                 <label for="exampleInputPassword1">Broj telefona:</label>
-                <input  v-bind:disabled="!izmena" v-model="pacijent.broj"  type="text" id="broj"  name="login" >
+                <input  v-bind:disabled="!izmena" v-model="pacijent.telefon"  type="text" id="broj"  name="login" >
             </div>
         </div>
             <button v-if="!izmena" @click="omoguci_izmenu" class="btn"><i class="fa fa-edit"></i> Izmeni podatke</button>
@@ -57,16 +61,16 @@
         <div>
             
 
-            <b-modal id="modal-1" title="Promena lozinke">
-                <form ref="form" @submit.stop.prevent="handleSubmit">
-                    <b-form-group  label="Stara lozinka:"  label-for="staraL" invalid-feedback="Name is required">
-                        <b-form-input id="staraL"  required></b-form-input>
+            <b-modal ref="my-modal" @ok="handleOk" id="modal-1" title="Promena lozinke">
+                <form ref="form" @submit.stop.prevent="izmeniLozinku">
+                    <b-form-group  label="Stara lozinka:"  label-for="staraL" invalid-feedback="Morate popuniti ovo polje">
+                        <b-form-input type="password" id="staraL" :state="stara" v-model="lozinkaForma.oldPassword"  required></b-form-input>
                     </b-form-group>
-                    <b-form-group  label="Nova lozinka:"  label-for="novaL" invalid-feedback="Name is required">
-                        <b-form-input id="novaL"  required></b-form-input>
+                    <b-form-group   label="Nova lozinka:"  label-for="novaL" v-bind:invalid-feedback="provera">
+                        <b-form-input type="password" id="novaL" :state="nova" v-model="lozinkaForma.newPassword"  required></b-form-input>
                     </b-form-group>
-                    <b-form-group  label="Ponovi novu lozinku:"  label-for="ponovljenjaL" invalid-feedback="Name is required">
-                        <b-form-input id="ponovljenjaL"  required></b-form-input>
+                    <b-form-group   label="Ponovi novu lozinku:"  label-for="ponovljenjaL" v-bind:invalid-feedback="provera">
+                        <b-form-input type="password" :state="ponovljena" id="ponovljenjaL" v-model="potvrdaLozinke"  required></b-form-input>
                     </b-form-group>
                 
                 </form>
@@ -80,21 +84,27 @@
 </template>
 
 <script>
+    import axios from "axios";
+    import errorAlert from '@/components/errorAlert.vue';
     export default {
+        components: {
+          errorAlert,
+        },
         data() {
             return {
+                stara: null,
+                nova: null,
+                ponovljena: null,
+                provera: '',
                 izmena: false,
-                ime: 'Masa Matovic',
-                pacijent : {
-                    ime: 'Masa',
-                    prezime: 'Matovic',
-                    JBMG: '0505997715106',
-                    adresa: 'Sekspitova 5',
-                    grad: 'Novi Sad',
-                    drzava: 'Srbija',
-                    broj: '061 555 1389',
-                    email: 'masa@gmail.com'
-
+                poruka: '',
+                poruka_lozinka: '',
+                pacijent : {},
+                potvrdaLozinke: '',
+                lozinkaForma: {
+                  oldPassword: '',
+                  newPassword: ''
+                  
                 }
             }
         },
@@ -105,10 +115,84 @@
             },
             sacuvaj(){
                 event.preventDefault();
-                this.izmena=false;
-                console.log(this.pacijent.grad);
+                this.poruka = '';
+                if (this.pacijent.ime == '' || this.pacijent.prezime == '' || this.pacijent.telefon == ''
+                   || this.pacijent.grad == '' || this.pacijent.drzava == '' || this.pacijent.adresa == '')
+                   {
+                     this.poruka = 'Morate popuniti sva polja!';
+                     return;
+                   }
+                axios
+                .put('/pacijent/izmeni/', this.pacijent)
+                .then(response => {
+                  this.pacijent = response.data;  
+                  console.log(this.pacijent);
+                  this.izmena = false;
+                })
+                .catch(error=>{
+                    console.log(error);
+                });
+            },
+            izlistajPacijenta(){
+               axios
+              .get("/pacijent/izlistajPacijenta/" + this.$store.state.user.id)
+              .then(response => {
+                this.pacijent = response.data;
+              })
+              .catch(error => {
+                console.log(error);
+              });
+            },
+            restart(){
+              this.stara = null;
+              this.nova = null;
+              this.ponovljena = null;
+              this.provera = '';  
+            },
+             handleOk(bvModalEvt) {
+              bvModalEvt.preventDefault();
+              this.restart();
+              if (this.lozinkaForma.oldPassword == ''){
+                this.stara = false;
+              } 
+              if ( this.lozinkaForma.newPassword == '' ){
+                this.nova = false;
+                this.provera = 'Morate popuniti ovo polje!'
+     
+              }
+              if ( this.potvrdaLozinke == ''){
+                  this.ponovljena = false
+                  this.provera = 'Morate popuniti ovo polje'
+     
+              }
+              if (this.lozinkaForma.newPassword != this.potvrdaLozinke){
+                this.restart();
+                this.nova = false;
+                this.ponovljena = false
+                this.provera = 'Niste dobro uneli novu lozinu!'
+                return;
+              }  
+              this.izmeniLozinku();
+            },
+            izmeniLozinku(){
+              event.preventDefault();
+                 axios
+                .post("/auth/promeniLozinku/", this.lozinkaForma)
+                .then(response => {
+                  console.log(response);
+                  this.$refs['my-modal'].hide()
+                  alert('uspesno ste promenili lozinku');
+                })
+                .catch(error => {
+                  console.log(error);
+                });   
             }
-        },
+             
+      },
+      mounted () {
+         this.izlistajPacijenta();
+  }
+          
     }
 </script>
 

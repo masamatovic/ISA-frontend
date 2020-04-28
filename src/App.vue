@@ -1,10 +1,11 @@
+
 <template>
   <div id="app">
     <!--div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div-->
-    <NavBar v-bind:korisnik="korisnik"></NavBar>
+    <NavBar></NavBar>
     <router-view />
   </div>
 </template>
@@ -13,17 +14,19 @@
 import NavBar from '@/components/NavBar.vue';
 import BootstrapVue from "bootstrap-vue";
 import Vue from "vue";
+import VueJwtDecode from "vue-jwt-decode";
 
 Vue.use(BootstrapVue);
 export default Vue.extend({
   components: {
     NavBar,
   },
-  data() {
-    return {
-      korisnik: "pacijent"
+   mounted() {
+    if (localStorage.getItem("jwt") != undefined) {
+      this.$store.commit( 'login', VueJwtDecode.decode(localStorage.getItem("jwt")));
+     // this.$store.state.user = VueJwtDecode.decode(localStorage.getItem("jwt"));
     }
-  },
+  }
 });
 </script>
 

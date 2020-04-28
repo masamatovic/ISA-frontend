@@ -73,7 +73,7 @@
       <!--list of doctor's pacients-->
       <div id="pacientList">
           <ul>
-              <li v-for="pacient in allPacients">{{pacient}}</li>
+              <!--li v-for="pacient in allPacients">{{pacient}}</li-->
           </ul>
       </div>
       <!--end list all pacients-->

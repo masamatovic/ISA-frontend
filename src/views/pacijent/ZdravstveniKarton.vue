@@ -14,7 +14,7 @@
                     <label for="Ime">Ime:</label>
                 </b-col>
                 <b-col sm="9">
-                    <b-form-input v-model="info.ime" disabled id="Ime" type="text"></b-form-input>
+                    <b-form-input v-model="pacijent.ime" disabled id="Ime" type="text"></b-form-input>
                 </b-col>
             </b-row>
             <b-row class="kolona">
@@ -22,7 +22,7 @@
                     <label  for="Prezime">Prezime:</label>
                 </b-col>
                 <b-col sm="9">
-                    <b-form-input v-model="info.prezime" disabled id="Prezime" type="text"></b-form-input>
+                    <b-form-input v-model="pacijent.prezime" disabled id="Prezime" type="text"></b-form-input>
                 </b-col>
             </b-row>
              <b-row class="kolona">
@@ -38,7 +38,7 @@
                     <label for="KGrupa">Krva grupa:</label>
                 </b-col>
                 <b-col sm="9">
-                    <b-form-input v-model="info.krvna_gurupa" disabled id="KGrupa"  type="text" ></b-form-input>
+                    <b-form-input v-model="info.krvnaGrupa" disabled id="KGrupa"  type="text" ></b-form-input>
                 </b-col>
             </b-row>             
             <b-row class="kolona">
@@ -87,22 +87,41 @@
 </template>
 
 <script>
+    import axios from "axios";
     export default {
         data() {
             return {
-                info: {
-                    ime: 'Pera',
-                    prezime: 'Peric',
-                    pol: 'Musko',
-                    krvna_gurupa: 'B+',
-                    visina: 187.5,
-                    tezina: 87,
-                    dioptrija: '-0.25',
-                    alergije: 'ambrozija, maline, brufen'
-                }
+                info:{},
+                pacijent:{}
             }
         
-        }
+        },
+        methods: {
+            izlistajPacijenta(){
+               axios
+              .get("/pacijent/izlistajPacijenta/" + this.$store.state.user.id)
+              .then(response => {
+                this.pacijent = response.data;
+              })
+              .catch(error => {
+                console.log(error);
+              });
+            },
+            izlistajKarton() {
+               axios
+              .get("/pacijent/izlistajKarton/" + this.$store.state.user.id)
+              .then(response => {
+                this.info = response.data;
+              })
+              .catch(error => {
+                console.log(error);
+              });
+            }
+        },
+        mounted () {
+            this.izlistajKarton();
+            this.izlistajPacijenta();
+        },
     }
 </script>
 

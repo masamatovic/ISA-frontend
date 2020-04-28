@@ -1,7 +1,8 @@
 <template>
   <div id="adminKlinke">
+      Ovde ce biti admin klinike
       <!--form for change of hospitaj data-->
-      <form>
+      <!--form>
           <div class="form-row">
               <div class="form group">
                   <label for="clinicName">Naziv kliniek:</label>
@@ -20,7 +21,6 @@
                   <input type="text" id="clinicDescription"/>
               </div>
           </div>
-          <!--TODO: free appointment days-->
           <div class="form-row">
               <div class="form group">
                   <label for="clinicDoctorList">Spisak ljekara:</label>
@@ -41,14 +41,12 @@
                   </select>
               </div>
           </div>
-          <!--TODO:cjenovinik-->
-      </form>
+      </form-->
       <!-- end form-->
       <!--form appointment information setup-->
-      <form>
+      <!--form>
           <div id="appointInfo" class="form-row">
             <div class="form group">
-                <!--TODO:date for appointment-->  
             </div>
             <div class="form-row">
                 <div class="form-group">
@@ -87,10 +85,10 @@
                   <input type="number" id="appointPrice"/>
               </div>
           </div>
-      </form>
+      </form-->
       <!--end form-->
       <!-- form business info-->
-      <form>
+      <!--form>
           <div class="form-row">
               <div class="form-group">
                   <label for="clinicMark">Prosjecna ocjena klinike: {{clinic.mark}}</label>
@@ -109,17 +107,15 @@
                   </tbody>
                 </table>
             </div>
-            <!--TODO: graphic showing of appointments-->
             <div class="form-row">
                 <div class="form-group">
-                    <!--TODO: picking up a date -->
                     <label for="clinicIncome">Prihodi klinike: {{clinic.income}}</label>
                 </div>
             </div>
-      </form>
+      </form-->
       <!--end form-->
       <!--form presonal data-->
-      <form>
+      <!--form>
           <div class="form-row">
               <div class="form-group">
                   <label for="adminClinicName">Ime:</label>
@@ -192,7 +188,7 @@
                     </b-form-group>
                 </form>
           </b-modal>
-      </form>
+      </form-->
       <!-- end form-->
 
     

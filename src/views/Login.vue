@@ -1,5 +1,9 @@
 <template >
+   
   <div class="pocetna">
+  <div v-if="poruka!=''">
+  <errorAlert v-bind:poruka="poruka"></errorAlert>
+  </div>
   <div class="wrapper fadeInDown">
   <div id="formContent">
       <div>
@@ -11,12 +15,12 @@
   
     <form>
     <div class="form-group">  
-      <input type="text" id="email" class="fadeIn second" name="login" placeholder="E-mail">
+      <input type="text" id="email"  v-model="korisnik.email" name="login" placeholder="E-mail">
     </div>
     <div class="form-group">
-      <input type="text" id="password" class="fadeIn third" name="login" placeholder="Lozinka">
+      <input type="password" id="password"  v-model="korisnik.lozinka" class="fadeIn third" name="login" placeholder="Lozinka">
     </div>
-      <input type="submit" class="fadeIn fourth" value="Prijava">
+      <input type="submit" @click="login()" class="fadeIn fourth" value="Prijava">
     </form>
 
     <div id="formFooter">
@@ -30,7 +34,65 @@
 
 <script>
 
+    import VueJwtDecode from "vue-jwt-decode";
+    import axios from "axios";
+    import errorAlert from '@/components/errorAlert.vue';
+
     export default {
+      components: {
+        errorAlert,
+      },
+      data() {
+        return {
+          poruka: '',
+          korisnik: {
+            email: '',
+            lozinka: ''
+          }
+        }
+      },
+      methods: {
+        login() {    
+            event.preventDefault();
+            this.poruka='';
+            if (this.korisnik.email == '' || this.korisnik.lozinka == ''){
+              this.poruka = 'Morate popuniti sva polja!';
+              return;
+            }
+            axios
+                .post('/auth/login/', this.korisnik)
+                .then(response => {
+                    localStorage.setItem("jwt", response.data.accessToken);
+                    this.$store.commit( 'login', VueJwtDecode.decode(localStorage.getItem("jwt")));
+                    this.pronadjiProfil();
+                })
+                .catch(error=>{
+                    this.poruka = '' ;
+                    this.poruka = 'Niste uneli tacne podatke!'
+                    console.log(error);
+                });
+        },
+        pronadjiProfil(){
+          
+          if (this.$store.state.user.role.authority == 'PACIJENT'){
+            this.$router.push('/pacijent')
+          }
+          else if (this.$store.state.user.role.authority == 'LEKAR'){
+            this.$router.push('/ljekar')
+          }
+          else if (this.$store.state.user.role.authority == 'MEDICINSKA_SESTRA'){
+            this.$router.push('/sestra')
+          }
+          else if (this.$store.state.user.role.authority == 'ADMIN_KLINIKE'){
+            this.$router.push('/adminKlinike')
+          }
+          else if (this.$store.state.user.role.authority == 'ADMIN_KCENTRA'){
+            this.$router.push('/adminKC')
+          }
+        }
+      },
+      mounted () {
+      },
     }
 </script>
 
@@ -160,8 +222,13 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active  
   transform: scale(0.95);
 }
 
-input[type=text] {
-  background-color: #f6f6f6;
+
+input[type=text], input[type=password]:focus {
+  background-color: #fff;
+  border-bottom: 2px solid #5fbae9;
+}
+input[type=text], input[type=password]{
+  background-color: white;
   border: none;
   color: #0d0d0d;
   padding: 10px 32px;
@@ -181,14 +248,11 @@ input[type=text] {
   border-radius: 5px 5px 5px 5px;
 }
 
-input[type=text]:focus {
-  background-color: #fff;
-  border-bottom: 2px solid #5fbae9;
-}
-
-input[type=text]:placeholder {
+input[type=text], input[type=password]:placeholder {
   color: #cccccc;
 }
+
+
 
 
 
