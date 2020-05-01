@@ -1,5 +1,12 @@
 <template>
     <div class="wrapper fadeInDown">
+        <div v-if="noviPacijent == true" >
+        <b-alert dismissible show class="d-flex justify-content-center" variant="info" >
+            <h5>
+                Vaš zdravstveni karton biće popunjen prilikom prvog pregleda
+            </h5>
+        </b-alert>
+        </div>
         <div id="formContent">
             <div id="formHeader">
                 <h1>Zdravstveni karton</h1>
@@ -92,12 +99,14 @@
         data() {
             return {
                 info:{},
-                pacijent:{}
+                pacijent:{},
+                noviPacijent: false,
             }
         
         },
         methods: {
             izlistajPacijenta(){
+               
                axios
               .get("/pacijent/izlistajPacijenta/" + this.$store.state.user.id)
               .then(response => {
@@ -108,14 +117,20 @@
               });
             },
             izlistajKarton() {
+                this.noviPacijent=false;
                axios
               .get("/pacijent/izlistajKarton/" + this.$store.state.user.id)
               .then(response => {
                 this.info = response.data;
+                console.log(this.info);
+                if (this.info.pol == null){  
+                    this.noviPacijent= true;
+              }
               })
               .catch(error => {
                 console.log(error);
               });
+
             }
         },
         mounted () {

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <b-alert show class="d-flex justify-content-center" variant="danger" >
+  <b-alert show  class="d-flex justify-content-center" variant="danger" >
     <h5>
         {{poruka}}
     </h5>

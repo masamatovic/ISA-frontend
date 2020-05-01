@@ -10,7 +10,7 @@ import AdministratorKC from '@/views/administrator_KC/AdministatorKC.vue';
 import AdminKlinike from "@/views/administrator_klinike/AdminKlinike.vue";
 import MedSestra from "@/views/medicinska sestra/MedSestra.vue";
 import Ljekar from "@/views/ljekar/Ljekar.vue";
-
+import AktivacijaPacijenta from '@/views/pacijent/AktivacijaPacijenta.vue';
 
 Vue.use(VueRouter);
 
@@ -30,6 +30,12 @@ const routes = [
     name: "Registracija",
     component: Registracija
   },
+  {
+    path: '/aktivacijaPacijenta/:id',
+    name: 'Aktivacija pacijenta',
+    component: AktivacijaPacijenta,
+  },
+
   {
     path: "/pacijent",
     name: "Pacijent",

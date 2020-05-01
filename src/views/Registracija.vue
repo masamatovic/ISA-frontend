@@ -1,5 +1,8 @@
 <template>
 <div class="pocetna">
+  <div v-if="poruka != ''">
+    <errorAlert  v-bind:poruka="poruka"></errorAlert>  
+  </div> 
  <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
@@ -8,46 +11,46 @@
     <form>
         <div class="form-row">
             <div class="form-group col-md-6">
-                <input type="text" id="ime" class="fadeIn second" name="login" placeholder="Ime">
+                <input type="text" v-model="korisnik.ime" id="ime" class="fadeIn second" name="login" placeholder="Ime">
             </div>
             <div class="form-group col-md-6">
-                <input type="text" id="prezime" class="fadeIn third" name="login" placeholder="Prezime">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <input type="text" id="jmbg" class="fadeIn second" name="login" placeholder="JMBG">
-            </div>
-            <div class="form-group col-md-6">
-                <input type="text" id="email" class="fadeIn second" name="login" placeholder="E-mail">
+                <input type="text" v-model="korisnik.prezime" id="prezime" class="fadeIn third" name="login" placeholder="Prezime">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
-                <input type="text" id="lozinka" class="fadeIn second" name="login" placeholder="Lozinka">
+                <input type="text" v-model="korisnik.jmbg" id="jmbg" class="fadeIn second" name="login" placeholder="JMBG">
             </div>
             <div class="form-group col-md-6">
-                <input type="text" id="potvrda" class="fadeIn third" name="login" placeholder="Potvrda lozinke">
+                <input type="text" v-model="korisnik.email" id="email" class="fadeIn second" name="login" placeholder="E-mail">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <input type="text" v-model="korisnik.lozinka" id="lozinka" class="fadeIn second" name="login" placeholder="Lozinka">
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" v-model="potvrda" id="potvrda" class="fadeIn third" name="login" placeholder="Potvrda lozinke">
             </div>
         </div>
          <div class="form-row">
             <div class="form-group col-md-6">
-                <input type="text" id="adresa" class="fadeIn second" name="login" placeholder="Adresa">
+                <input type="text" v-model="korisnik.adresa" id="adresa" class="fadeIn second" name="login" placeholder="Adresa">
             </div>
             <div class="form-group col-md-6">
-                <input type="text" id="grad" class="fadeIn third" name="login" placeholder="Grad">
+                <input type="text" v-model="korisnik.grad" id="grad" class="fadeIn third" name="login" placeholder="Grad">
             </div>
         </div>
          <div class="form-row">
             <div class="form-group col-md-6">
-                <input type="text" id="drzava" class="fadeIn second" name="login" placeholder="Država">
+                <input type="text" v-model="korisnik.drzava" id="drzava" class="fadeIn second" name="login" placeholder="Država">
             </div>
             <div class="form-group col-md-6">
-                <input type="text" id="broj" class="fadeIn third" name="login" placeholder="Broj telefona">
+                <input type="text" v-model="korisnik.telefon" id="broj" class="fadeIn third" name="login" placeholder="Broj telefona">
             </div>
         </div>
        
-         <input type="submit" class="fadeIn fourth" value="Registracija">
+         <input type="submit" v-on:click="registracija" class="fadeIn fourth" value="Registracija">
     </form>
 
     <!-- Remind Passowrd -->
@@ -61,7 +64,56 @@
 </template>
 
 <script>
+    import axios from "axios";
+    import errorAlert from '@/components/errorAlert.vue';
     export default {
+      components: {
+        errorAlert,
+      },
+      data() {
+        return {
+          korisnik: {},
+          potvrda: '',
+          poruka: ''
+        }
+      }, 
+      methods: {
+        registracija() {
+            
+            
+          event.preventDefault();
+            
+          if (this.korisnik.ime == '' || this.korisnik.prezime == '' || this.korisnik.telefon == '' || this.korisnik.email == ''
+              || this.korisnik.grad == '' || this.korisnik.drzava == '' || this.korisnik.adresa == '' || this.korisnik.lozinka == '')
+          {
+            this.poruka = 'Morate popuniti sva polja!';
+            return;
+          }
+          if (this.korisnik.lozinka != this.potvrda){
+            this.poruka = 'Potvda lozinke je neispravna!';
+            this.korisnik.lozinka = '';
+            this.potvrda = '';
+            return;
+          }
+
+          this.poruka='';
+          if (this.korisnik.email == '' || this.korisnik.lozinka == ''){
+            this.poruka = 'Morate popuniti sva polja!';
+            return;
+          }
+          axios
+                .post('/auth/zahtevZaRegistraciju/', this.korisnik)
+                .then(response => {
+                    console.log(response);
+                    alert('Vas zahtev za registraciju je poslat');
+                })
+                .catch(error=>{
+                    this.poruka = '' ;
+                    this.poruka = 'Vec postoji korisnik ili zahtev sa ovim emailom!'
+                    console.log(error);
+                });            
+        }
+      },
         
     }
 </script>
