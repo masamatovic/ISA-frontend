@@ -22,9 +22,8 @@
         <form>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="exampleInputPassword1">Ime:</label>
+              <label for="exampleInputPassword1">Dijagnoza:</label>
               <input
-                v-bind:disabled="!izmena"
                 v-model="pacijent.ime"
                 type="text"
                 id="ime"
@@ -33,9 +32,8 @@
               />
             </div>
             <div class="form-group col-md-6">
-              <label for="exampleInputPassword1">Prezime:</label>
+              <label for="exampleInputPassword1">Recept:</label>
               <input
-                v-bind:disabled="!izmena"
                 v-model="pacijent.prezime"
                 type="text"
                 id="prezime"
@@ -44,84 +42,13 @@
               />
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="exampleInputPassword1">JMBG:</label>
-              <input
-                disabled
-                v-model="pacijent.jmbg"
-                type="text"
-                id="jmbg"
-                class="fadeIn second"
-                name="login"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="exampleInputPassword1">E-mail:</label>
-              <input
-                disabled
-                v-model="pacijent.email"
-                type="text"
-                id="email"
-                class="fadeIn second"
-                name="login"
-              />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="exampleInputPassword1">Adresa:</label>
-              <input
-                v-bind:disabled="!izmena"
-                v-model="pacijent.adresa"
-                type="text"
-                id="adresa"
-                class="fadeIn second"
-                name="login"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="exampleInputPassword1">Grad:</label>
-              <input
-                v-bind:disabled="!izmena"
-                v-model="pacijent.grad"
-                type="text"
-                id="grad"
-                name="login"
-              />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="exampleInputPassword1">Drzava:</label>
-              <input
-                v-bind:disabled="!izmena"
-                v-model="pacijent.drzava"
-                type="text"
-                id="drzava"
-                name="login"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="exampleInputPassword1">Broj telefona:</label>
-              <input
-                v-bind:disabled="!izmena"
-                v-model="pacijent.telefon"
-                type="text"
-                id="broj"
-                name="login"
-              />
-            </div>
-          </div>
           <button v-if="!izmena" @click="omoguci_izmenu" class="btn">
-            <i class="fa fa-edit"></i> Izmeni podatke
+            <i class="fa fa-edit"></i> Sacuvaj
           </button>
           <button v-else @click="sacuvaj" class="btn">
-            <i class="fa fa-save"></i> Sačuvaj izmene
+            <i class="fa fa-save"></i> Sačuvaj podatke
           </button>
-          <b-button v-if="!izmena" v-b-modal.modal-1
-            ><i class="fa fa-lock"></i> Izmeni lozinku</b-button
-          >
+
           <div>
             <b-modal
               ref="my-modal"
@@ -446,6 +373,7 @@ input[type="text"] {
   font-size: 16px;
   margin: 5px;
   width: 92%;
+  height: 150px;
   border: 2px solid #f6f6f6;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;

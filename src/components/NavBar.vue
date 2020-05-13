@@ -68,14 +68,56 @@
           >
             Slobodni dani
           </router-link>
+
           <router-link
             :to="{ name: 'Pacijent' }"
             class="nav-item nav-link"
-            v-if="this.$store.state.user.role.authority == 'MEDICINSKA_SESTRA'"
+            v-if="this.$store.state.user.role.authority == 'DOKTOR'"
           >
-            Zakazivanje
+            Profil
           </router-link>
-
+          <router-link
+            :to="{ name: 'Pacijent' }"
+            class="nav-item nav-link"
+            v-if="this.$store.state.user.role.authority == 'DOKTOR'"
+          >
+            Lista pacijenata
+          </router-link>
+          <router-link
+            :to="{ name: 'Pacijent' }"
+            class="nav-item nav-link"
+            v-if="this.$store.state.user.role.authority == 'DOKTOR'"
+          >
+            Profil
+          </router-link>
+          <router-link
+            :to="{ name: 'Pacijent' }"
+            class="nav-item nav-link"
+            v-if="this.$store.state.user.role.authority == 'DOKTOR'"
+          >
+            Zapocni Pregled
+          </router-link>
+          <router-link
+            :to="{ name: 'Pacijent' }"
+            class="nav-item nav-link"
+            v-if="this.$store.state.user.role.authority == 'DOKTOR'"
+          >
+            Radni kalendar
+          </router-link>
+          <router-link
+            :to="{ name: 'Pacijent' }"
+            class="nav-item nav-link"
+            v-if="this.$store.state.user.role.authority == 'DOKTOR'"
+          >
+            Slobodni dani
+          </router-link>
+          <router-link
+            :to="{ name: 'Pacijent' }"
+            class="nav-item nav-link"
+            v-if="this.$store.state.user.role.authority == 'DOKTOR'"
+          >
+            Zakazi pregled
+          </router-link>
           <span>
             <button
               type="button"
