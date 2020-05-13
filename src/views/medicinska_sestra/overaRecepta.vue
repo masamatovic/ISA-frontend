@@ -3,17 +3,14 @@
     <b-row>
       <b-col cols="4">
         <div>
-          <b-card
-            class="kontrole"
-            title="Upravljanje zahtevima za registraciju"
-          >
+          <b-card class="kontrole" title="Upravljanje receptima">
             <div>
               <br />
-              <h5>Sortiraj zahteve za registraciju po:</h5>
+              <h5>Sortiraj recepte po:</h5>
               <b-select v-model="sort" @change="sortirajPo(sort)">
-                <option value="Ime">Ime</option>
                 <option value="Datum">Datum</option>
-                <option value="JMBG">JMBG</option>
+                <option value="Pacijent">Pacijent</option>
+                <option value="Doktor">Doktor</option>
               </b-select>
             </div>
           </b-card>
@@ -47,7 +44,6 @@
         </b-card>
       </b-col>
     </b-row>
-    <b-button href="#" variant="primary">Unesi dijagnozu</b-button>
   </div>
 </template>
 
