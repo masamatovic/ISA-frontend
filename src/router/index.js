@@ -8,7 +8,7 @@ import ZKarton from "@/views/pacijent/ZdravstveniKarton.vue";
 import Klinike from "@/views/pacijent/Klinike.vue";
 import AdministratorKC from "@/views/administrator_KC/AdministatorKC.vue";
 import AdminKlinike from "@/views/administrator_klinike/AdminKlinike.vue";
-import MedSestra from "@/views/medicinska sestra/MedSestra.vue";
+import MedSestra from "@/views/medicinska_sestra/MedSestra.vue";
 import Ljekar from "@/views/ljekar/Ljekar.vue";
 import AktivacijaPacijenta from "@/views/pacijent/AktivacijaPacijenta.vue";
 import ListaPacijenata from "@/views/medicinska_sestra/listaPacijenata.vue";
@@ -18,6 +18,7 @@ import ListaPacijenataL from "@/views/ljekar/listaPacijenata.vue";
 import RadniKalendarL from "@/views/ljekar/radniKalendar.vue";
 import ZapocniPregled from "@/views/ljekar/zapocniPregled.vue";
 import ZakaziPregled from "@/views/ljekar/zakaziPregled.vue";
+import KlinikaInfo from "@/views/klinika/KlinikaInfo.vue";
 
 Vue.use(VueRouter);
 
@@ -112,6 +113,11 @@ const routes = [
     path: "/zakaziPregled",
     name: "Kalendar",
     component: ZakaziPregled,
+  },
+  {
+    path: "/klinikaInfo/:id",
+    name: "KlinikaInfo",
+    component: KlinikaInfo,
   },
 ];
 
