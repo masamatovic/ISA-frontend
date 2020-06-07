@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue';
+import NavBar from "@/components/NavBar.vue";
 import BootstrapVue from "bootstrap-vue";
 import Vue from "vue";
 import VueJwtDecode from "vue-jwt-decode";
@@ -19,12 +19,14 @@ import VueJwtDecode from "vue-jwt-decode";
 Vue.use(BootstrapVue);
 export default Vue.extend({
   components: {
-    NavBar,
+    NavBar
   },
-   mounted() {
+  mounted() {
     if (localStorage.getItem("jwt") != undefined) {
-      this.$store.commit( 'login', VueJwtDecode.decode(localStorage.getItem("jwt")));
-     // this.$store.state.user = VueJwtDecode.decode(localStorage.getItem("jwt"));
+      this.$store.commit(
+        "login",
+        VueJwtDecode.decode(localStorage.getItem("jwt"))
+      );
     }
   }
 });
