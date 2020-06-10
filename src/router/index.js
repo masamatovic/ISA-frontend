@@ -19,6 +19,7 @@ import RadniKalendarL from "@/views/ljekar/radniKalendar.vue";
 import ZapocniPregled from "@/views/ljekar/zapocniPregled.vue";
 import ZakaziPregled from "@/views/ljekar/zakaziPregled.vue";
 import KlinikaInfo from "@/views/klinika/KlinikaInfo.vue";
+import IstorijaPregleda from "@/views/pacijent/IstorijaPregleda.vue";
 
 Vue.use(VueRouter);
 
@@ -118,6 +119,11 @@ const routes = [
     path: "/klinikaInfo/:id",
     name: "KlinikaInfo",
     component: KlinikaInfo,
+  },
+  {
+    path: "/istorijaPregleda",
+    name: "IstorijaPregleda",
+    component: IstorijaPregleda,
   },
 ];
 
