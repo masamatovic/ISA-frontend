@@ -261,7 +261,7 @@ export default {
     pretrazi() {
       this.poruka = "";
       if (this.datum == "" || this.doktor.tipPregleda.naziv == "") {
-        this.poruka = "Morate uneti datup i tip pregleda!";
+        this.poruka = "Morate uneti datum i tip pregleda!";
         return;
       }
       axios
