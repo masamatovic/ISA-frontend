@@ -47,7 +47,7 @@
                 <th scope="col">Cena</th>
                 <th scope="col">Popust</th>
                 <th scope="col">Trajanje</th>
-                <th scope="col">Vreme</th>
+                <th scope="col">Datum i vreme</th>
                 <th scope="col">Sala</th>
                 <th scope="col">Doktor</th>
                 <th scope="col">Rezervisi</th>
@@ -58,7 +58,7 @@
                 <th scope="col">{{ pregled.tip.naziv }}</th>
                 <th scope="col">{{ pregled.cena }}</th>
                 <th scope="col">{{ pregled.popust }}</th>
-                <th scope="col">{{ pregled.trajanje }}</th>
+                <th scope="col">{{ pregled.trajanje }}h</th>
                 <th scope="col">{{ pregled.datum }} u {{ pregled.vreme }}</th>
                 <th scope="col">{{ pregled.sala.naziv }} {{ pregled.sala.broj }}</th>
                 <th scope="col">{{ pregled.doktor.ime }} {{ pregled.doktor.prezime }}</th>

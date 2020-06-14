@@ -103,13 +103,8 @@
               v-model="filter.naziv"
               placeholder="Naziv"
             ></b-input>
-            <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
-              <b-input
-                style="width:20%"
-                id="inline-form-input-surname"
-                v-model="filter.adresa"
-                placeholder="Adresa"
-              ></b-input>
+            <b-input-group style="width:20%" class="mb-2 mr-sm-2 mb-sm-0">
+              <b-input id="inline-form-input-surname" v-model="filter.adresa" placeholder="Adresa"></b-input>
             </b-input-group>
             <b-input
               style="width:20%"

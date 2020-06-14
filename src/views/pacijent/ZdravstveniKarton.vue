@@ -72,7 +72,7 @@
       </b-row>
       <b-row class="kolona">
         <b-col sm="3">
-          <label for="Alergije">Dioptrija:</label>
+          <label for="Alergije">Alergije:</label>
         </b-col>
         <b-col sm="9">
           <b-form-input v-model="info.alergije" disabled id="Alergijr" type="text"></b-form-input>
