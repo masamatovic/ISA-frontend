@@ -1,53 +1,45 @@
 <template>
   <div>
     <b-row>
-      <b-col cols="4">
-        <div>
-          <b-card
-            class="kontrole"
-            title="Upravljanje zahtevima za registraciju"
-          >
-            <div>
-              <br />
-              <h5>Sortiraj zahteve za registraciju po:</h5>
-              <b-select v-model="sort" @change="sortirajPo(sort)">
-                <option value="Ime">Ime</option>
-                <option value="Datum">Datum</option>
-                <option value="JMBG">JMBG</option>
-              </b-select>
-            </div>
-          </b-card>
-        </div>
-      </b-col>
       <b-col>
-        <b-card
-          no-body
-          v-for="(klinika, index) in klinike"
-          :key="index"
-          class="kartica"
-        >
-          <b-row>
-            <b-col cols="2">
-              <b-card-img
-                class="rounded-0"
-                src="https://image.flaticon.com/icons/svg/2760/2760841.svg"
-                alt="Image"
-              ></b-card-img>
-            </b-col>
-            <b-col cols="10">
-              <b-card-body :title="klinika.naziv">
-                <h6 style="color:gray">
-                  {{ klinika.adresa }}, {{ klinika.grad }}, {{ klinika.drzava }}
-                </h6>
-                {{ klinika.opis }}
-              </b-card-body>
-            </b-col>
-          </b-row>
-          <b-button href="#" variant="primary">Overi</b-button>
-        </b-card>
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Ime</th>
+              <th scope="col">Prezime</th>
+              <th scope="col">Email</th>
+              <th scope="col">Adresa</th>
+              <th scope="col">Grad</th>
+              <th scope="col">Drzava</th>
+              <th scope="col">Telefon</th>
+              <th scope="col">JMBG</th>
+              <th scope="col">Odobren</th>
+              <th scope="col">Prihvati</th>
+              <th scope="col">Odbi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(zahtev, index) in zahtevi" :key="index">
+              <th scope="col">{{ zahtev.ime }}</th>
+              <th scope="col">{{ zahtev.prezime }}</th>
+              <th scope="col">{{ zahtev.email }}</th>
+              <th scope="col">{{ zahtev.adresa }}</th>
+              <th scope="col">{{ zahtev.grad }}</th>
+              <th scope="col">{{ zahtev.drzava }}</th>
+              <th scope="col">{{ zahtev.telefon }}</th>
+              <th scope="col">{{ zahtev.jmbg }}</th>
+              <th scope="col">{{ zahtev.odobren }}</th>
+              <th scope="col">
+                <b-button @click="prihvati(zahtev)">Prihvati</b-button>
+              </th>
+              <th scope="col">
+                <b-button @click="odbij(zahtev)">Odbij</b-button>
+              </th>
+            </tr>
+          </tbody>
+        </table>
       </b-col>
     </b-row>
-    <b-button href="#" variant="primary">Unesi dijagnozu</b-button>
   </div>
 </template>
 
@@ -56,63 +48,58 @@ import axios from "axios";
 export default {
   data() {
     return {
-      sort: "",
-      klinika: {
-        naziv: "",
-        grad: "",
-        jmbg: "",
-        adresa: "",
-        drzava: "",
-        opis: "",
-      },
-      klinike: [],
+      zahtevi: [],
+      zahtev: {},
+      poruka: ""
     };
   },
   methods: {
-    ucitajKlinike() {
+    ucitajZahteve() {
       axios
-        .get("/klinika/izlistajSve")
-        .then((response) => {
-          this.klinike = response.data;
+        .get("/registracija/izlistajZahteve")
+        .then(response => {
+          this.zahtevi = response.data;
           console.log(response.data);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
-    sortirajPo(vrednost) {
+    prihvati(zahtev) {
       axios
-        .get("/klinika/sortiraj/" + vrednost)
-        .then((response) => {
-          this.klinike = response.data;
+        .put("/registracija/prihvatiZahtev", zahtev)
+        .then(response => {
           console.log(response.data);
+          this.ucitajZahteve();
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
+    odbij(zahtev) {
+      this.poruka = "losee";
+      axios
+        .put("/registracija/odbijZahtev/" + this.poruka, zahtev)
+        .then(response => {
+          console.log(response.data);
+          this.ucitajZahteve();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   },
   mounted() {
-    this.ucitajKlinike();
-  },
+    this.ucitajZahteve();
+  }
 };
 </script>
 
 <style scoped>
-.kontrole {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  margin-left: 10px;
+.table {
+  margin-left: 20px;
   margin-top: 20px;
-  background-color: #f7f7f7;
-}
-.kartica {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  margin-top: 20px;
-  padding-left: 10px;
-  max-width: 880px;
-
-  position: relative;
+  margin-right: 50px;
+  padding-right: 30px;
 }
 </style>

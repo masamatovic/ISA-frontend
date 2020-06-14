@@ -126,7 +126,7 @@
                 <b-form-group
                   label="Stara lozinka:"
                   label-for="staraL"
-                  invalid-feedback="Morate popuniti ovo polje"
+                  v-bind:invalid-feedback="proveraStare"
                 >
                   <b-form-input
                     type="password"
@@ -184,6 +184,7 @@ export default {
       nova: null,
       ponovljena: null,
       provera: "",
+      proveraStare: "",
       izmena: false,
       poruka: "",
       poruka_lozinka: "",
@@ -230,6 +231,8 @@ export default {
         .get("/pacijent/izlistajPacijenta/" + this.$store.state.user.id)
         .then(response => {
           this.pacijent = response.data;
+          console.log("pacijent: " + response.data);
+          console.log(response.data);
         })
         .catch(error => {
           console.log(error);
@@ -240,20 +243,25 @@ export default {
       this.nova = null;
       this.ponovljena = null;
       this.provera = "";
+      this.proveraStare = "";
     },
     handleOk(bvModalEvt) {
       bvModalEvt.preventDefault();
       this.restart();
       if (this.lozinkaForma.oldPassword == "") {
         this.stara = false;
+        this.proveraStare = "Morate popuniti ovo polje!";
+        return;
       }
       if (this.lozinkaForma.newPassword == "") {
         this.nova = false;
         this.provera = "Morate popuniti ovo polje!";
+        return;
       }
       if (this.potvrdaLozinke == "") {
         this.ponovljena = false;
         this.provera = "Morate popuniti ovo polje";
+        return;
       }
       if (this.lozinkaForma.newPassword != this.potvrdaLozinke) {
         this.restart();
@@ -274,6 +282,8 @@ export default {
           alert("uspesno ste promenili lozinku");
         })
         .catch(error => {
+          this.stara = false;
+          this.proveraStare = "Uneli ste netacnu staru lozinku!";
           console.log(error);
         });
     }

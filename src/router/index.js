@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Registracija from "../views/Registracija.vue";
 import Pacijent from "@/views/pacijent/Pacijent.vue";
@@ -25,112 +24,176 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/proba",
-    name: "Home",
-    component: Home,
-  },
-  {
     path: "/",
     name: "Login",
     component: Login,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/registracija",
     name: "Registracija",
     component: Registracija,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/aktivacijaPacijenta/:id",
     name: "Aktivacija pacijenta",
     component: AktivacijaPacijenta,
+    meta: {
+      requiresAuth: true,
+    },
   },
 
   {
     path: "/pacijent",
     name: "Pacijent",
     component: Pacijent,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/zdravstveniKarton",
     name: "ZKarton",
     component: ZKarton,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/pregledKlinika",
     name: "Klinike",
     component: Klinike,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/ljekar",
     name: "Ljekar",
     component: Ljekar,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/sestra",
     name: "Sestra",
     component: MedSestra,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/adminKC",
     name: "AdminKc",
     component: AdministratorKC,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/adminKlinike",
     name: "AdminKlinike",
     component: AdminKlinike,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/listaPacijenata",
     name: "Pacijenti",
     component: ListaPacijenata,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/overaRecepta",
     name: "Recepti",
     component: OveraRecepta,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/radniKalendar",
     name: "Kalendar",
     component: RadniKalendar,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/listaPacijenataL",
     name: "Pacijenti",
     component: ListaPacijenataL,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/radniKalendarL",
     name: "Kalendar",
     component: RadniKalendarL,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/zapocniPregled",
-    name: "Kalendar",
+    name: "ZapocniPregled",
     component: ZapocniPregled,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/zakaziPregled",
-    name: "Kalendar",
+    name: "ZakaziPregled",
     component: ZakaziPregled,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/klinikaInfo/:id",
     name: "KlinikaInfo",
     component: KlinikaInfo,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/istorijaPregleda",
     name: "IstorijaPregleda",
     component: IstorijaPregleda,
+    meta: {
+      requiresAuth: false,
+    },
   },
 ];
 
 const router = new VueRouter({
-  //mode: "history",
-  // base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) {
+    next();
+    return;
+  }
+
+  if (localStorage.getItem("jwt")) {
+    next();
+    return;
+  }
+
+  next("/");
 });
 
 export default router;
