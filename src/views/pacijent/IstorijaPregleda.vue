@@ -14,9 +14,9 @@
             <div>
               <br />
               <h5>Sortiraj preglede po:</h5>
-              <b-select>
-                <option value="naziv">Tipu pregleda</option>
-                <option value="grad">Datumu</option>
+              <b-select v-model="sort" @change="sortirajPo(sort)">
+                <option value="datum">Tipu pregleda</option>
+                <option value="tip">Datumu</option>
               </b-select>
             </div>
           </b-card>
@@ -56,7 +56,7 @@
                 </b-modal>
               </th>
               <th>
-                <b-button v-b-modal.modal-2 @click="prikaziOLmodal = true">Oceni lekara</b-button>
+                <b-button v-b-modal.modal-2 @click="setLekar(pregled)">Oceni lekara</b-button>
 
                 <b-modal
                   v-if="prikaziOLmodal"
@@ -93,7 +93,8 @@ export default {
       prikaziOLmodal: false,
       prikaziOKmodal: false,
       OL: {},
-      OK: {}
+      OK: {},
+      sort: ""
     };
   },
   methods: {
@@ -119,6 +120,8 @@ export default {
     oceniLekara() {
       this.OL.pacijent = this.$store.state.user.id;
       this.OL.ocena = this.ocenaLekara;
+      console.log("ocena lekara");
+      console.log(this.OL);
       axios
         .post("/doktor/oceni/", this.OL)
         .then(response => {
@@ -129,7 +132,7 @@ export default {
         .catch(error => {
           console.log(error);
           this.prikaziOLmodal = false;
-          alert("Ne mozete dva puta oceniti doktora");
+          alert("Ne mozete dva puta oceniti lekara");
         });
     },
     oceniKliniku() {
@@ -146,6 +149,18 @@ export default {
           console.log(error);
           this.prikaziOKmodal = false;
           alert("Ne mozete dva puta oceniti kliniku");
+        });
+    },
+    sortirajPo(vrednost) {
+      axios
+        .get("/pregled/sortiraj/" + vrednost + "/" + this.$store.state.user.id)
+        .then(response => {
+          this.listaPregleda = response.data;
+          console.log("sortirani pregledi");
+          console.log(this.listaPregleda);
+        })
+        .catch(error => {
+          console.log(error);
         });
     },
     resetModalOL() {

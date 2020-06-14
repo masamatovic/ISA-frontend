@@ -87,15 +87,22 @@
             class="nav-item nav-link"
             v-if="this.$store.state.user.role.authority == 'DOKTOR'"
           >Zakazi pregled</router-link>
-          <span>
-            <button
-              type="button"
-              id="odjava"
-              @click="odjava"
-              class="btn btn-outline-secondary"
-              v-if="this.$store.state.user.role.authority != ''"
-            >Odjava</button>
-          </span>
+          <button
+            type="button"
+            id="odjava"
+            @click="odjava"
+            class="btn btn-outline-secondary"
+            style="position: relative; left: 2%;"
+            v-if="this.$store.state.user.role.authority == 'PACIJENT'"
+          >Odjava</button>
+          <button
+            type="button"
+            id="odjava"
+            @click="odjava"
+            class="btn btn-outline-secondary"
+            style="position: relative; left: 72%;"
+            v-if="this.$store.state.user.role.authority == 'ADMIN_KCENTRA'"
+          >Odjava</button>
         </div>
       </div>
     </nav>

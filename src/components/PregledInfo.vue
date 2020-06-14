@@ -63,12 +63,12 @@ export default {
       zahtev: {
         datum: "",
         vreme: "",
-        cena: "",
-        doktor: {},
-        pacijent: {},
-        klinika: {},
-        tip: {}
-      }
+        doktor: 0,
+        pacijent: 0,
+        klinika: 0,
+        tip: 0
+      },
+      vraceniZahtev: {}
     };
   },
   methods: {
@@ -89,18 +89,18 @@ export default {
     },
     zakazi() {
       this.zahtev.datum = this.pregledInfo.datum;
+      this.zahtev.cena = this.pregledInfo.tipPregleda.cena;
       this.zahtev.vreme = this.pregledInfo.vreme;
       this.zahtev.doktor = this.pregledInfo.doktor.id;
       this.zahtev.pacijent = this.$store.state.user.id;
       this.zahtev.klinika = this.pregledInfo.klinika;
-      this.zahtev.tip = this.tipPregleda.id;
+      this.zahtev.tip = this.pregledInfo.tipPregleda.id;
       console.log(this.zahtev);
       axios
         .post("/zahtevZaPregled/posalji", this.zahtev)
         .then(response => {
-          //this.tipPregleda = response.data;
-          console.log("uspesno zakzan pregled");
-          console.log(response.data);
+          this.vraceniZahtev = response.data;
+          alert("Zahtev za pregled je poslat");
         })
         .catch(error => {
           console.log(error);
@@ -108,7 +108,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.pregledInfo);
     this.imeIpezime();
     // this.izlistajTipPregleda();
   }

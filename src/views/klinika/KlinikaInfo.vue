@@ -40,7 +40,6 @@
       </b-col>
       <b-col>
         <div v-if="prikaz == 1">
-          <!--TabelaUDPregleda v-model="udPregledi"></TabelaUDPregleda-->
           <table class="table">
             <thead class="thead-light">
               <tr>
@@ -48,7 +47,7 @@
                 <th scope="col">Cena</th>
                 <th scope="col">Popust</th>
                 <th scope="col">Trajanje</th>
-                <th scope="col">Datum i vreme</th>
+                <th scope="col">Vreme</th>
                 <th scope="col">Sala</th>
                 <th scope="col">Doktor</th>
                 <th scope="col">Rezervisi</th>
@@ -75,20 +74,19 @@
             <b-input
               id="inline-form-input-name"
               class="mb-2 mr-sm-2 mb-sm-0"
-              style="width:17%"
+              style="width:20%"
               placeholder="Ime"
               v-model="doktor.ime"
             ></b-input>
-            <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
+            <b-input-group style="width:20%" class="mb-2 mr-sm-2 mb-sm-0">
               <b-input
-                style="width:17%"
                 id="inline-form-input-surname"
                 v-model="doktor.prezime"
                 placeholder="Prezime"
               ></b-input>
             </b-input-group>
-            <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
-              <b-input style="width:17%" id="inline-form-input-range" placeholder="Ocena"></b-input>
+            <b-input-group style="width:10%" class="mb-2 mr-sm-2 mb-sm-0">
+              <b-input id="inline-form-input-range" v-model="doktor.ocena" placeholder="Ocena"></b-input>
             </b-input-group>
             <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
               <b-dropdown
@@ -120,14 +118,13 @@
             </b-input-group>
             <b-button variant="secondary " @click="pretrazi()">Pretrazi</b-button>
           </b-form>
-          <!--TabelaLekara v-bind:listaLekara="listaLekara"></TabelaLekara-->
           <table class="table">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Ime</th>
                 <th scope="col">Prezime</th>
                 <th scope="col">Prosecna ocena</th>
-                <th scope="col">Datum i vreme</th>
+                <th scope="col">Vreme</th>
                 <th scope="col">Detalji</th>
               </tr>
             </thead>
@@ -135,10 +132,82 @@
               <tr v-for="(lekar, index) in listaLekara" :key="index">
                 <th scope="col">{{ lekar.ime }}</th>
                 <th scope="col">{{ lekar.prezime }}</th>
-                <th scope="col">5</th>
+                <th scope="col">{{ lekar.ocena }}</th>
                 <th scope="col">
                   <VueCtkDateTimePicker
-                    :id="index"
+                    v-bind:id="lekar.id"
+                    v-model="time"
+                    format="H"
+                    time-format="H:mm"
+                    formatted="H"
+                    locale="rs"
+                    :only-time="onlyTime"
+                    :disabled-hours="lekar.zauzetiSati"
+                    label="Odaberite vreme"
+                    minute-interval="60"
+                    color="#6c757d"
+                  />
+                </th>
+                <th scope="col">
+                  <b-button @click="vidiDetalje(lekar)">Detalji</b-button>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div v-else-if="prikaz == 3">
+          <PregledInfo v-bind:pregledInfo="pregledInfo"></PregledInfo>
+        </div>
+        <div div v-else-if="prikaz == 4">
+          <b-form inline style=" margin-top: 20px;">
+            <b-input
+              id="inline-form-input-name"
+              class="mb-2 mr-sm-2 mb-sm-0"
+              style="width:20%"
+              placeholder="Ime"
+              v-model="doktor.ime"
+            ></b-input>
+            <b-input-group style="width:20%" class="mb-2 mr-sm-2 mb-sm-0">
+              <b-input
+                id="inline-form-input-surname"
+                v-model="doktor.prezime"
+                placeholder="Prezime"
+              ></b-input>
+            </b-input-group>
+          </b-form>
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Ime</th>
+                <th scope="col">Prezime</th>
+                <th scope="col">Tip pregleda</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Vreme</th>
+                <th scope="col">Detalji</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(lekar, index) in filtritaniDoktori" :key="index">
+                <th scope="col">{{ lekar.ime }}</th>
+                <th scope="col">{{ lekar.prezime }}</th>
+                <th scope="col">{{ lekar.tipPregleda.naziv }}</th>
+                <th scope="col">
+                  <b-form-datepicker
+                    disabled
+                    :min="min"
+                    id="example-datepicker"
+                    :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                }"
+                    v-model="datum"
+                  ></b-form-datepicker>
+                </th>
+                <th scope="col">
+                  <VueCtkDateTimePicker
+                    v-bind:id="lekar.id"
                     v-model="time"
                     format="H"
                     time-format="H:mm"
@@ -157,9 +226,6 @@
               </tr>
             </tbody>
           </table>
-        </div>
-        <div v-else-if="prikaz == 3">
-          <PregledInfo v-bind:pregledInfo="pregledInfo"></PregledInfo>
         </div>
       </b-col>
     </b-row>
@@ -194,6 +260,7 @@ export default {
       doktor: {
         ime: "",
         prezime: "",
+        ocena: 0.0,
         tipPregleda: {
           naziv: ""
         }
@@ -214,17 +281,26 @@ export default {
         klinika: 0
       },
       poruka: "",
-      pretragaKlinika: false
+      pretragaKlinika: false,
+      listaZaFiltraziju: []
     };
   },
-  /*  computed: {
+  computed: {
     filtritaniDoktori: function() {
-      return this.listaLekara.filter((lekar) => {
-        return lekar.prezime.match(this.doktor.prezime);
+      return this.listaZaFiltraziju.filter(lekar => {
+        return (
+          lekar.prezime.match(this.doktor.prezime) &&
+          lekar.ime.match(this.doktor.ime) &&
+          lekar.tipPregleda.naziv.match(this.doktor.tipPregleda.naziv)
+        );
       });
-    },
-  },*/
+    }
+  },
   methods: {
+    filtriraj() {
+      this.prikaz = 4;
+      this.listaZaFiltraziju = this.listaLekara;
+    },
     vidiDetalje(lekar) {
       this.poruka = "";
       if (!this.pretragaKlinika) {
@@ -264,6 +340,8 @@ export default {
         this.poruka = "Morate uneti datum i tip pregleda!";
         return;
       }
+      console.log("ovde se pise doktor");
+      console.log(this.doktor);
       axios
         .post(
           "/doktor/pretrazi/" + this.klinika.id + "/" + this.datum,
@@ -345,8 +423,10 @@ export default {
       this.izlistajLekare();
     } else {
       this.pretragaKlinika = true;
-      this.listaLekara = this.$store.state.lekari;
+      this.listaZaFiltraziju = this.$store.state.lekari;
+      console.log("ovo je lista lekara" + this.listaZaFiltraziju);
       this.datum = this.$store.state.datum;
+      this.prikaz = 4;
     }
   }
 };
